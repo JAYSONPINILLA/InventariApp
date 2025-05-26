@@ -34,11 +34,15 @@ public class ProductDTO {
     private Double stockmax;
 
     @NotNull
-    private Boolean state; 
+    private Boolean state;
     
     @NotNull
-    private Long categoryId;  
+    private Long idcategory;
+    
+    private String namecategory;
     
     @NotNull
-    private Long mesuarementId;     
+    private Long idmeasurement;
+
+    private String namemeasurement;
 }

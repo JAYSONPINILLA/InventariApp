@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.erp.inventariapp.DTOs.ProductDTO;
+import com.erp.inventariapp.Entities.Category;
+import com.erp.inventariapp.Entities.Measurement;
 import com.erp.inventariapp.Entities.Product;
 import com.erp.inventariapp.Repositories.CategoryRepository;
 import com.erp.inventariapp.Repositories.MeasurementRepository;
@@ -27,23 +30,27 @@ public class ProductService implements IProductService {
     
     @Override
     public List<ProductDTO> findAll() {
-        List<Product> products = (List<Product>) productrepository.findAll();
+        Sort sort = Sort.by("name").ascending();
+        List<Product> products = (List<Product>) productrepository.findAll(sort);
         List<ProductDTO> productsDTO = new ArrayList<>();
-        products.forEach(p -> productsDTO.add(this.convertToDTO(p)));
+        products.forEach(p -> productsDTO.add(this.convertProductToDTO(p)));       
         return productsDTO;
     }
 
     @Override
     public ProductDTO findById(Long idproduct) {
         Product p = productrepository.findById(idproduct).get();
-        return (this.convertToDTO(p)); 
+        System.out.println("****** IDCATEGORY: "+p.getCategory().getIdcategory());
+        System.out.println("****** NAMECATEGORY: "+p.getCategory().getName());
+
+        return (this.convertProductToDTO(p)); 
     }
 
     @Override
     public List<ProductDTO> findByCodeLike(String code) {
         List<Product> products = (List<Product>) productrepository.findByCodeLike(code);
         List<ProductDTO> productsDTO = new ArrayList<>();
-        products.forEach(p -> productsDTO.add(this.convertToDTO(p)));
+        products.forEach(p -> productsDTO.add(this.convertProductToDTO(p)));
         return productsDTO;
     }
 
@@ -51,7 +58,7 @@ public class ProductService implements IProductService {
     public List<ProductDTO> findByNameLike(String name) {
         List<Product> products = (List<Product>) productrepository.findByNameLike(name);
         List<ProductDTO> productsDTO = new ArrayList<>();
-        products.forEach(p -> productsDTO.add(this.convertToDTO(p)));
+        products.forEach(p -> productsDTO.add(this.convertProductToDTO(p)));
         return productsDTO;
     }
 
@@ -59,7 +66,7 @@ public class ProductService implements IProductService {
     public List<ProductDTO> findByCategoryId(Long idcategory) {
         List<Product> products = (List<Product>) productrepository.findByCategoryId(idcategory);
         List<ProductDTO> productsDTO = new ArrayList<>();
-        products.forEach(p -> productsDTO.add(this.convertToDTO(p)));
+        products.forEach(p -> productsDTO.add(this.convertProductToDTO(p)));
         return productsDTO;
     }
 
@@ -67,7 +74,7 @@ public class ProductService implements IProductService {
     public List<ProductDTO> findByCategoryName(String categoryname) {
         List<Product> products = (List<Product>) productrepository.findByCategoryName(categoryname);
         List<ProductDTO> productsDTO = new ArrayList<>();
-        products.forEach(p -> productsDTO.add(this.convertToDTO(p)));
+        products.forEach(p -> productsDTO.add(this.convertProductToDTO(p)));
         return productsDTO;
     }
 
@@ -98,13 +105,13 @@ public class ProductService implements IProductService {
         p.setStockmin(dto.getStockmin());
         p.setStockmax(dto.getStockmax());
         p.setState(dto.getState());
-        p.setCategory(categoryrepository.findById(dto.getCategoryId()).get());
-        p.setMeasurement(measurementrepository.findById(dto.getMesuarementId()).get());
-        
-        return convertToDTO(productrepository.save(p));
+        p.setCategory(categoryrepository.findById(dto.getIdcategory()).get());
+        p.setMeasurement(measurementrepository.findById(dto.getIdmeasurement()).get());
+
+        return convertProductToDTO(productrepository.save(p));
     }
 
-    private ProductDTO convertToDTO(Product p) {
+    private ProductDTO convertProductToDTO(Product p) {
         ProductDTO dto = new ProductDTO();
         dto.setIdproduct(p.getIdproduct());
         dto.setCode(p.getCode());
@@ -114,8 +121,35 @@ public class ProductService implements IProductService {
         dto.setStockmin(p.getStockmin());
         dto.setStockmax(p.getStockmax());
         dto.setState(p.getState());
-        dto.setCategoryId(p.getCategory().getIdcategory());
-        dto.setMesuarementId(p.getMeasurement().getIdmeasurement());
+        dto.setIdcategory(p.getCategory().getIdcategory());
+        dto.setNamecategory(p.getCategory().getName());
+        dto.setIdmeasurement(p.getMeasurement().getIdmeasurement());
+        dto.setNamemeasurement(p.getMeasurement().getName());
+
+        return dto;
+    }    
+
+    /*
+    private ProductDTO convertObjectToDTO(Object[] p) {
+        ProductDTO dto = new ProductDTO();
+
+        Product product = (Product) p[0];
+        Category category = (Category) p[1];
+        Measurement measurement = (Measurement) p[2];
+
+        dto.setIdproduct(product.getIdproduct());
+        dto.setCode(product.getCode());
+        dto.setName(product.getName());
+        dto.setStock(product.getStock());
+        dto.setStockmin(product.getStockmin());
+        dto.setStockmax(product.getStockmax());
+        dto.setPrice(product.getPrice());
+        dto.setState(product.getState());
+        dto.setIdcategory(category.getIdcategory());
+        dto.setNamecategory(category.getName());
+        dto.setIdmeasurement(measurement.getIdmeasurement());
+        dto.setNamemeasurement(measurement.getName());
         return dto;
     }
+    */
 }

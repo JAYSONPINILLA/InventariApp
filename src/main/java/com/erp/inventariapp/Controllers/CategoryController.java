@@ -22,22 +22,22 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/categories")
+@RequestMapping("/api/categories")
 @Tag(name="Categories")
 public class CategoryController {
     @Autowired
     CategoryService categoryservice;
 
-    @GetMapping("/listAll")
+    @GetMapping
     @Operation(summary = "Obtener listado de todas las Categorías")
     public ResponseEntity<List<CategoryDTO>> listAll(){
         return ResponseEntity.ok(categoryservice.findAll());
     }
 
-    @GetMapping("/listById")
+    @GetMapping("/{id}")
     @Operation(summary = "Obtener una Categoría por Id")
-    public ResponseEntity<CategoryDTO> listById(Long idcategory){
-        return ResponseEntity.ok(categoryservice.findById(idcategory));
+    public ResponseEntity<CategoryDTO> listById(@PathVariable Long id){
+        return ResponseEntity.ok(categoryservice.findById(id));
     }
 
     @PostMapping

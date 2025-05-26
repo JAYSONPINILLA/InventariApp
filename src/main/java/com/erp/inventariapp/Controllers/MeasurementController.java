@@ -22,22 +22,22 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/measurement")
+@RequestMapping("/api/measurement")
 @Tag(name="Measurements")
 public class MeasurementController {
     @Autowired
     MeasurementService measurementservice;
 
-    @GetMapping("/listAll")
+    @GetMapping
     @Operation(summary = "Obtener listado de todas las Unidades de medida")
     public ResponseEntity<List<MeasurementDTO>> listAll(){
         return ResponseEntity.ok(measurementservice.findAll());
     }
 
-    @GetMapping("/listById")
+    @GetMapping("/{id}")
     @Operation(summary = "Obtener una Unidad de medida por Id")
-    public ResponseEntity<MeasurementDTO> listById(Long idmeasurement){
-        return ResponseEntity.ok(measurementservice.findById(idmeasurement));
+    public ResponseEntity<MeasurementDTO> listById(Long id){
+        return ResponseEntity.ok(measurementservice.findById(id));
     }
 
     @PostMapping

@@ -22,22 +22,22 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 @Tag(name="User")
 public class UserController {
     @Autowired
     UserService userservice;
 
-    @GetMapping("/listAll")
+    @GetMapping
     @Operation(summary = "Obtener listado de todos las Usuarios")
     public ResponseEntity<List<UserDTO>> listAll(){
         return ResponseEntity.ok(userservice.findAll());
     }
 
-    @GetMapping("/listById")
+    @GetMapping("/{id}")
     @Operation(summary = "Obtener una Usuario por Id")
-    public ResponseEntity<UserDTO> listById(Long iduser){
-        return ResponseEntity.ok(userservice.findById(iduser));
+    public ResponseEntity<UserDTO> listById(Long id){
+        return ResponseEntity.ok(userservice.findById(id));
     }
 
     @PostMapping

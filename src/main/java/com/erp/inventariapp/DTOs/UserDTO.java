@@ -26,5 +26,8 @@ public class UserDTO {
     @NotNull
     private Boolean state;
 
-    private Long idperson;     
+    private Long idperson;   
+    private String typeId;   
+    private String identification;   
+    private String name;   
 }

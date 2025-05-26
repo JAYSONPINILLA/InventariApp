@@ -22,46 +22,46 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
 @Tag(name="Products")
 public class ProductController {
     @Autowired
     ProductService productservice;
 
-    @GetMapping("/listAll")
+    @GetMapping
     @Operation(summary = "Obtener listado de todos los Productos")
     public ResponseEntity<List<ProductDTO>> listAll(){
         return ResponseEntity.ok(productservice.findAll());
     }
 
-    @GetMapping("/listById")
+    @GetMapping("/{id}")
     @Operation(summary = "Obtener un Producto por Id")
-    public ResponseEntity<ProductDTO> listById(Long idproduct){
-        return ResponseEntity.ok(productservice.findById(idproduct));
+    public ResponseEntity<ProductDTO> listById(@PathVariable Long id){
+        return ResponseEntity.ok(productservice.findById(id));
     }
 
-    @GetMapping("/findByCodeLike")
+    @GetMapping("/findByCodeLike/{code}")
     @Operation(summary = "Obtener listado de Productos filtrados por Código")
-    public ResponseEntity<List<ProductDTO>> findByCodeLike(String code){
-        return ResponseEntity.ok(productservice.findByCodeLike(code));
+    public ResponseEntity<List<ProductDTO>> findByCodeLike(@PathVariable String codeproduct){
+        return ResponseEntity.ok(productservice.findByCodeLike(codeproduct));
     }
 
-    @GetMapping("/findByNameLike")
+    @GetMapping("/findByNameLike/{name}")
     @Operation(summary = "Obtener listado de Productos filtrados por Nombre")
-    public ResponseEntity<List<ProductDTO>> findByNameLike(String name){
-        return ResponseEntity.ok(productservice.findByNameLike(name));
+    public ResponseEntity<List<ProductDTO>> findByNameLike(@PathVariable String nameproduct){
+        return ResponseEntity.ok(productservice.findByNameLike(nameproduct));
     }
 
-    @GetMapping("/findByCategoryId")
+    @GetMapping("/findByCategoryId/{idcategory}")
     @Operation(summary = "Obtener listado de Productos filtrados por Id de Categoría")
-    public ResponseEntity<List<ProductDTO>> findByCategoryId(Long idcategory){
+    public ResponseEntity<List<ProductDTO>> findByCategoryId(@PathVariable Long idcategory){
         return ResponseEntity.ok(productservice.findByCategoryId(idcategory));
     }
 
-    @GetMapping("/findByCategoryName")
+    @GetMapping("/findByCategoryName/{namecategory}")
     @Operation(summary = "Obtener listado de Productos filtrados por Nombre de Categoría")
-    public ResponseEntity<List<ProductDTO>> findByCategoryName(String categoryname){
-        return ResponseEntity.ok(productservice.findByCategoryName(categoryname));
+    public ResponseEntity<List<ProductDTO>> findByCategoryName(@PathVariable String namecategory){
+        return ResponseEntity.ok(productservice.findByCategoryName(namecategory));
     }
 
     @PostMapping
