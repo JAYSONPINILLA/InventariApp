@@ -1,5 +1,7 @@
 package com.erp.inventariapp.DTOs;
 
+import com.erp.inventariapp.Enums.RoleUserEnum;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -21,7 +23,7 @@ public class UserDTO {
     private String password;
 
     @NotBlank
-    private String role;
+    private RoleUserEnum roleUser;
 
     @NotNull
     private Boolean state;

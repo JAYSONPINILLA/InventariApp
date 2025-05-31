@@ -8,9 +8,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.erp.inventariapp.DTOs.ProductDTO;
-import com.erp.inventariapp.Entities.Category;
-import com.erp.inventariapp.Entities.Measurement;
 import com.erp.inventariapp.Entities.Product;
+import com.erp.inventariapp.Exceptions.ResourceNotFoundException;
 import com.erp.inventariapp.Repositories.CategoryRepository;
 import com.erp.inventariapp.Repositories.MeasurementRepository;
 import com.erp.inventariapp.Repositories.ProductRepository;
@@ -92,8 +91,8 @@ public class ProductService implements IProductService {
 
     @Override
     public void delete(Long idproduct) {
-        //if (!productrepository.existsById(idproduct))
-        //    throw ResourceNotFoundException("Producto no encontrado");
+        if (!productrepository.existsById(idproduct))
+            throw new ResourceNotFoundException("Producto no encontrado");
         productrepository.deleteById(idproduct);
     }
 

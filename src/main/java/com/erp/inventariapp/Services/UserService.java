@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.erp.inventariapp.DTOs.UserDTO;
 import com.erp.inventariapp.Entities.Person;
-import com.erp.inventariapp.Entities.User;
+import com.erp.inventariapp.Entities.UserApp;
 import com.erp.inventariapp.Repositories.UserRepository;
 import com.erp.inventariapp.Repositories.PersonRepository;
 import com.erp.inventariapp.ServicesInterfaces.IUserService;
@@ -26,7 +26,7 @@ public class UserService implements IUserService {
 
     @Override
     public List<UserDTO> findAll() {
-        List<User> users = (List<User>) userrepository.findAll();
+        List<UserApp> users = (List<UserApp>) userrepository.findAll();
         List<UserDTO> usersDTO = new ArrayList<>();
         users.forEach(u -> usersDTO.add(this.convertToDTO(u)));
         return usersDTO;
@@ -34,19 +34,19 @@ public class UserService implements IUserService {
 
     @Override
     public UserDTO findById(Long iduser) {
-        User u = userrepository.findById(iduser).get();
+        UserApp u = userrepository.findById(iduser).get();
         return (this.convertToDTO(u)); 
     }
 
     @Override
     public UserDTO create(UserDTO dto) {
-        User u = new User();
+        UserApp u = new UserApp();
         return saveOrUpdate(u, dto);
     }
 
     @Override
     public UserDTO update(Long id, UserDTO dto) {
-        User u = userrepository.findById(id).get();
+        UserApp u = userrepository.findById(id).get();
         return saveOrUpdate(u, dto);
     }
 
@@ -57,7 +57,7 @@ public class UserService implements IUserService {
         userrepository.deleteById(iduser);
     }
 
-    private UserDTO saveOrUpdate(User u, UserDTO dto) {
+    private UserDTO saveOrUpdate(UserApp u, UserDTO dto) {
         u.setUsername(dto.getUsername());
 
         //u.setPassword(dto.getPassword());
@@ -67,7 +67,7 @@ public class UserService implements IUserService {
         //Para verificar contraseñas al Iniciar Sesión
         //boolean matches = encoder.matches(enteredPassword, userFromDB.getPassword());
         
-        u.setRole(dto.getRole());
+        u.setRoleUser(dto.getRoleUser());
         u.setState(dto.getState());
         System.out.println("****--IDPERSON = "+dto.getIdperson()+" --****");
         Optional<Person> optionalperson = personrepository.findById(dto.getIdperson());
@@ -80,12 +80,12 @@ public class UserService implements IUserService {
         return convertToDTO(userrepository.save(u));
     }
 
-    private UserDTO convertToDTO(User u) {
+    private UserDTO convertToDTO(UserApp u) {
         UserDTO dto = new UserDTO();
         dto.setIduser(u.getIduser());
         dto.setUsername(u.getUsername());
         dto.setPassword(u.getPassword());
-        dto.setRole(u.getRole());
+        dto.setRoleUser(u.getRoleUser());
         dto.setState(u.getState());
         System.out.println("****-- BEFORE EVALUATE PERSON IN CONVERTODTO --****");
         if(u.getPerson()!=null)

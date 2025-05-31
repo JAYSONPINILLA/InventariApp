@@ -79,6 +79,6 @@ public class Person {
     private Seller seller;
     
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<User> users;      
+    private List<UserApp> users;      
     
 }

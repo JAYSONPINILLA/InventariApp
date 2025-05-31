@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.erp.inventariapp.DTOs.SellerDTO;
-import com.erp.inventariapp.DTOs.UserDTO;
 import com.erp.inventariapp.Entities.Seller;
 import com.erp.inventariapp.Exceptions.ResourceDeleteException;
 import com.erp.inventariapp.Exceptions.ResourceNotFoundException;
