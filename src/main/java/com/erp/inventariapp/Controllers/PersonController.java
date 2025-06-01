@@ -22,8 +22,8 @@ import com.erp.inventariapp.Services.PersonService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/api/person")
-@Tag(name="Person")
+@RequestMapping("/api/persons")
+@Tag(name="Persons")
 public class PersonController {
     @Autowired
     PersonService personService;
@@ -34,7 +34,7 @@ public class PersonController {
         if(dtos.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
     @GetMapping("/{idperson}")

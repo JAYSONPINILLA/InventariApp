@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@RequestMapping("/api/seller")
+@RequestMapping("/api/sellers")
 @Tag(name="Sellers")
 public class SellerController {
     
@@ -39,7 +39,7 @@ public class SellerController {
         if(dtos.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
     @GetMapping("/{idseller}")
