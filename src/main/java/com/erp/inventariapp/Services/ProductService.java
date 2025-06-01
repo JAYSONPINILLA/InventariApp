@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+//import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.erp.inventariapp.DTOs.ProductDTO;
@@ -29,8 +29,9 @@ public class ProductService implements IProductService {
     
     @Override
     public List<ProductDTO> findAll() {
-        Sort sort = Sort.by("name").ascending();
-        List<Product> products = (List<Product>) productrepository.findAll(sort);
+        //Sort sort = Sort.by("name").ascending();
+        //List<Product> products = (List<Product>) productrepository.findAll(sort);
+        List<Product> products = (List<Product>) productrepository.findAll();
         List<ProductDTO> productsDTO = new ArrayList<>();
         products.forEach(p -> productsDTO.add(this.convertProductToDTO(p)));       
         return productsDTO;
