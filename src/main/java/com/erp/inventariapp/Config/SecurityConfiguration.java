@@ -30,12 +30,13 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**", 
                                         "/api-docs/**",
+                                        "/api-docss/**",
                                         "/v3/api-docs/**", 
                                         "/swagger-ui/**", 
                                         "/swagger-ui.html",
                                         "/v3/api-docs.yaml").permitAll()
-                        //.anyRequest().permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
+                        //.anyRequest().authenticated()
                     )
                 //.formLogin(Customizer.withDefaults());
                 .sessionManagement(sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

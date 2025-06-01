@@ -40,6 +40,13 @@ public class CategoryController {
         return ResponseEntity.ok(categoryservice.findById(id));
     }
 
+    @GetMapping("/findByName/{name}")
+    @Operation(summary = "Obtener una Categoría por Name")
+    public ResponseEntity<List<CategoryDTO>> listById(@PathVariable String name){
+        return ResponseEntity.ok(categoryservice.findByName(name));
+    }
+
+
     @PostMapping
     @Operation(summary = "Crear nueva Categoría")
     public ResponseEntity<CategoryDTO> create(@Valid @RequestBody CategoryDTO categoryDTO) {

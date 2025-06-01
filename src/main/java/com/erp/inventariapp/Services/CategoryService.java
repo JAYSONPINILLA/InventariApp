@@ -32,6 +32,14 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
+    public List<CategoryDTO> findByName(String name) {
+        List<Category> categories = (List<Category>) categoryrepository.findByName(name);
+        List<CategoryDTO> categoriesDTO = new ArrayList<>();
+        categories.forEach(c -> categoriesDTO.add(this.convertToDTO(c)));
+        return categoriesDTO;
+    }
+
+    @Override
     public CategoryDTO create(CategoryDTO dto) {
         Category c = new Category();
         return saveOrUpdate(c, dto);
