@@ -9,10 +9,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SellerDTO {
-    private Long idseller;
+public class CustomerDTO {
+    private Long idcustomer;
 
     private Boolean state;
 
     private PersonDTO person;
 }
+

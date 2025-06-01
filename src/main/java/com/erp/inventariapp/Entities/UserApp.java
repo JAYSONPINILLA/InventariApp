@@ -36,7 +36,7 @@ public class UserApp implements UserDetails {
     @Column(nullable = false)
     private Boolean state;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idperson", referencedColumnName = "idperson")
     private Person person;
 

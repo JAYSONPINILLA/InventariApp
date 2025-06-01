@@ -22,14 +22,12 @@ public class UserDTO {
     @NotBlank
     private String password;
 
-    @NotBlank
+    //@NotBlank
     private RoleUserEnum roleUser;
 
     @NotNull
     private Boolean state;
 
-    private Long idperson;   
-    private String typeId;   
-    private String identification;   
-    private String name;   
+    private PersonDTO person;
+
 }

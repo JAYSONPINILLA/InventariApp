@@ -2,14 +2,17 @@ package com.erp.inventariapp.Services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.erp.inventariapp.DTOs.SellerDTO;
+import com.erp.inventariapp.Entities.Person;
 import com.erp.inventariapp.Entities.Seller;
 import com.erp.inventariapp.Exceptions.ResourceDeleteException;
 import com.erp.inventariapp.Exceptions.ResourceNotFoundException;
+import com.erp.inventariapp.Repositories.PersonRepository;
 import com.erp.inventariapp.Repositories.SellerRepository;
 import com.erp.inventariapp.ServicesInterfaces.ISellerService;
 
@@ -18,6 +21,12 @@ public class SellerService implements ISellerService {
 
     @Autowired
     SellerRepository sellerRepository;
+
+    @Autowired
+    PersonRepository personrepository;
+
+    @Autowired
+    PersonService personservice;
 
     @Override
     public List<SellerDTO> findAll() {
@@ -74,7 +83,7 @@ public class SellerService implements ISellerService {
         SellerDTO dto = new SellerDTO();
         dto.setIdseller(s.getIdseller());
         dto.setState(s.getState());
-        dto.setPerson(s.getPerson());
+        dto.setPerson(personservice.findById(s.getPerson().getIdperson()));
 
         return dto;
     }
@@ -82,7 +91,28 @@ public class SellerService implements ISellerService {
     private Seller convertToSeller(Seller s, SellerDTO dto){
         s.setIdseller(dto.getIdseller());
         s.setState(dto.getState());
-        s.setPerson(dto.getPerson());
+        
+        System.out.println("****--IDPERSON = "+dto.getPerson().getIdperson()+" --****");
+        Optional<Person> optionalperson = personrepository.findById(dto.getPerson().getIdperson());
+        if(optionalperson.isPresent()){
+            s.setPerson(optionalperson.get());
+        }else{
+            System.out.println("****-- NOT FOUND PERSON --****");
+            // Crear nueva persona con los datos del DTO
+            Person person = Person.builder()
+            .typeId(dto.getPerson().getTypeId())
+            .identification(dto.getPerson().getIdentification())
+            .name(dto.getPerson().getName())
+            .adress(dto.getPerson().getAdress())
+            .email(dto.getPerson().getEmail())
+            .phone(dto.getPerson().getPhone())
+            .birthdate(dto.getPerson().getBirthdate())
+            .genre(dto.getPerson().getGenre())
+            .build();
+            
+            s.setPerson(person);            
+        }
+        System.out.println("****-- END convertToSeller --****");        
 
         return s;
     }    

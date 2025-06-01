@@ -2,6 +2,7 @@ package com.erp.inventariapp.Entities;
 
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,7 +25,7 @@ public class Seller {
     @Column(nullable=false)
     private Boolean state;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idperson", referencedColumnName = "idperson")
     private Person person;
 }

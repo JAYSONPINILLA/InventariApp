@@ -28,7 +28,7 @@ public class Customer {
     @Column(nullable=false)
     private Boolean state;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idperson", referencedColumnName = "idperson")
     private Person person;
 

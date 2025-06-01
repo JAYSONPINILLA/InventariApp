@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.erp.inventariapp.Enums.GenreEnum;
 import com.erp.inventariapp.Enums.TypeIdEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -20,6 +21,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.*;
 
+@Builder
 @Entity
 @Table(name="Person", uniqueConstraints = {
                 @UniqueConstraint(columnNames = {"typeId", "identification"})
@@ -47,7 +49,6 @@ public class Person {
      */
     @Column(length=13, nullable=false)
     private String identification;
-   
     
     @Column(length=100, nullable=false)
     private String name;
@@ -73,12 +74,15 @@ public class Person {
     private GenreEnum genre;
 
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore //Evitar ciclos infinitos
     private Customer customer;
     
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore //Evitar ciclos infinitos
     private Seller seller;
     
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore //Evitar ciclos infinitos
     private List<UserApp> users;      
     
 }
