@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.inventariapp.DTOs.MeasurementDTO;
@@ -30,7 +31,10 @@ public class MeasurementController {
 
     @GetMapping
     @Operation(summary = "Obtener listado de todas las Unidades de medida")
-    public ResponseEntity<List<MeasurementDTO>> listAll(){
+    public ResponseEntity<List<MeasurementDTO>> listAll(@RequestParam(required = false) String name){
+        if (name != null && !name.isEmpty()) {
+            return ResponseEntity.ok(measurementservice.findByName(name));
+        }           
         return ResponseEntity.ok(measurementservice.findAll());
     }
 

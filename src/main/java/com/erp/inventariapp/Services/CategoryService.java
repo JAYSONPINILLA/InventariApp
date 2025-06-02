@@ -2,12 +2,14 @@ package com.erp.inventariapp.Services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.erp.inventariapp.DTOs.CategoryDTO;
 import com.erp.inventariapp.Entities.Category;
+import com.erp.inventariapp.Exceptions.ResourceNotFoundException;
 import com.erp.inventariapp.Repositories.CategoryRepository;
 import com.erp.inventariapp.ServicesInterfaces.ICategoryService;
 
@@ -33,10 +35,15 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public List<CategoryDTO> findByName(String name) {
-        List<Category> categories = (List<Category>) categoryrepository.findByName(name);
-        List<CategoryDTO> categoriesDTO = new ArrayList<>();
-        categories.forEach(c -> categoriesDTO.add(this.convertToDTO(c)));
-        return categoriesDTO;
+        Optional<List<Category>> optionalcategories = categoryrepository.findByNameContainingIgnoreCase(name);
+        if(optionalcategories.isPresent()){
+            List<Category> categories = optionalcategories.get();
+            List<CategoryDTO> categoriesDTO = new ArrayList<>();
+            categories.forEach(c -> categoriesDTO.add(this.convertToDTO(c)));
+            return categoriesDTO;
+        }else{
+            throw new ResourceNotFoundException("nameCateg");
+        }
     }
 
     @Override

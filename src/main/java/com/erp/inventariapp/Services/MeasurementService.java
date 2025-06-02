@@ -2,12 +2,16 @@ package com.erp.inventariapp.Services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.erp.inventariapp.DTOs.CategoryDTO;
 import com.erp.inventariapp.DTOs.MeasurementDTO;
+import com.erp.inventariapp.Entities.Category;
 import com.erp.inventariapp.Entities.Measurement;
+import com.erp.inventariapp.Exceptions.ResourceNotFoundException;
 import com.erp.inventariapp.Repositories.MeasurementRepository;
 import com.erp.inventariapp.ServicesInterfaces.IMeasurementService;
 
@@ -28,6 +32,19 @@ public class MeasurementService implements IMeasurementService {
     public MeasurementDTO findById(Long idMeasurement) {
         Measurement m = measurementrepository.findById(idMeasurement).get();
         return (this.convertToDTO(m)); 
+    }
+
+    @Override
+    public List<MeasurementDTO> findByName(String name) {
+        Optional<List<Measurement>> optional = measurementrepository.findByNameContainingIgnoreCase(name);
+        if(optional.isPresent()){
+            List<Measurement> measurements = optional.get();
+            List<MeasurementDTO> measurementsDTO = new ArrayList<>();
+            measurements.forEach(c -> measurementsDTO.add(this.convertToDTO(c)));
+            return measurementsDTO;
+        }else{
+            throw new ResourceNotFoundException("nameMesur");
+        }
     }
 
     @Override

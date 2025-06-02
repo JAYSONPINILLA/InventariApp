@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.inventariapp.DTOs.CategoryDTO;
@@ -30,7 +31,10 @@ public class CategoryController {
 
     @GetMapping
     @Operation(summary = "Obtener listado de todas las Categorías")
-    public ResponseEntity<List<CategoryDTO>> listAll(){
+    public ResponseEntity<List<CategoryDTO>> listAll(@RequestParam(required = false) String name){
+        if (name != null && !name.isEmpty()) {
+            return ResponseEntity.ok(categoryservice.findByName(name));
+        }        
         return ResponseEntity.ok(categoryservice.findAll());
     }
 
@@ -39,13 +43,6 @@ public class CategoryController {
     public ResponseEntity<CategoryDTO> listById(@PathVariable Long id){
         return ResponseEntity.ok(categoryservice.findById(id));
     }
-
-    @GetMapping("/findByName/{name}")
-    @Operation(summary = "Obtener una Categoría por Name")
-    public ResponseEntity<List<CategoryDTO>> listById(@PathVariable String name){
-        return ResponseEntity.ok(categoryservice.findByName(name));
-    }
-
 
     @PostMapping
     @Operation(summary = "Crear nueva Categoría")
