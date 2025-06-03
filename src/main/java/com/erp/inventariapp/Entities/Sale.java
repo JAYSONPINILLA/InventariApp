@@ -47,4 +47,12 @@ public class Sale {
     @ManyToOne
     @JoinColumn(name = "idcustomer", referencedColumnName = "idcustomer")
     private Customer customer;
+
+    @ManyToOne
+    @JoinColumn(name = "idseller", referencedColumnName = "idseller")
+    private Seller seller;    
+
+    @ManyToOne
+    @JoinColumn(name = "iduser", referencedColumnName = "iduser")
+    private UserApp user;    
 }

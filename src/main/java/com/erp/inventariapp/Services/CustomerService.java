@@ -46,6 +46,19 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
+    public List<CustomerDTO> findByName(String name) {
+        Optional<List<Customer>> optionalcustomers = customerRepository.findByNameContainingIgnoreCase(name);
+        if(optionalcustomers.isPresent()){
+            List<Customer> customers = optionalcustomers.get();
+            List<CustomerDTO> customersDTO = new ArrayList<>();
+            customers.forEach(c -> customersDTO.add(this.convertToDTO(c)));
+            return customersDTO;
+        }else{
+            throw new ResourceNotFoundException("nameCateg");
+        }
+    }
+
+    @Override
     public CustomerDTO create(CustomerDTO dto) {
         Customer s = new Customer();
         s = convertToCustomer(s, dto);

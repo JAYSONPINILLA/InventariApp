@@ -31,12 +31,11 @@ public class CustomerController {
     CustomerService customerService;
     
     @GetMapping
-    public ResponseEntity<List<CustomerDTO>> findAll() {
-        List<CustomerDTO> dtos = customerService.findAll();
-        if(dtos.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(dtos, HttpStatus.OK);
+    public ResponseEntity<List<CustomerDTO>> findAll(@RequestParam(required = false) String name) {
+        if (name != null && !name.isEmpty()) {
+            return ResponseEntity.ok(customerService.findByName(name));
+        }                
+        return new ResponseEntity<>(customerService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{idcustomer}")
