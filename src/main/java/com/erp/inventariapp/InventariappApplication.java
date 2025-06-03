@@ -18,4 +18,9 @@ public class InventariappApplication {
 		System.out.println("✅ DB_URL: " + System.getenv("DB_URL"));
 	}	
 
+	@PostConstruct
+	public void logStart() {
+		System.out.println("✅ Jayson Aplicación iniciada correctamente - VERIFICACIÓN");
+	}	
+
 }
