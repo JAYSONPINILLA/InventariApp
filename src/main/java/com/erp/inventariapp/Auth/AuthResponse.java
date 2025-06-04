@@ -5,10 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthResponse {
     String token;
+    String username;
+    //String role; 
+
+/*     public AuthResponse(String token, String username, String role){
+        this.token = token;
+        this.username = username;
+        this.role = role;
+    } */
 }

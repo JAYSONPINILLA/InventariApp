@@ -42,6 +42,20 @@ public class UserService implements IUserService {
         return (this.convertToDTO(u)); 
     }
 
+
+    @Override
+    public List<UserDTO> findByName(String name) {
+        Optional<List<UserApp>> optionalusers = userrepository.findByNameContainingIgnoreCase(name);
+        if(optionalusers.isPresent()){
+            List<UserApp> users = optionalusers.get();
+            List<UserDTO> usersDTO = new ArrayList<>();
+            users.forEach(c -> usersDTO.add(this.convertToDTO(c)));
+            return usersDTO;
+        }else{
+            throw new ResourceNotFoundException("nameUser");
+        }
+    }
+
     @Override
     public UserDTO create(UserDTO dto) {
         UserApp u = new UserApp();
@@ -65,32 +79,35 @@ public class UserService implements IUserService {
         //Person person = modelMapper.map(dto.getPerson(), Person.class);
 
         u.setUsername(dto.getUsername());
-
-        //u.setPassword(dto.getPassword());
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String hashedPassword = encoder.encode(dto.getPassword());
-        u.setPassword(hashedPassword); // Guarda el hash, no el texto plano
-        //Para verificar contraseñas al Iniciar Sesión
-        //boolean matches = encoder.matches(enteredPassword, userFromDB.getPassword());
+        
+        //Si Usuario es nuevo si trae password para encriptar
+        if(u.getIduser()==null){
+            //u.setPassword(dto.getPassword());
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            String hashedPassword = encoder.encode(dto.getPassword());
+            u.setPassword(hashedPassword); // Guarda el hash, no el texto plano
+            //Para verificar contraseñas al Iniciar Sesión
+            //boolean matches = encoder.matches(enteredPassword, userFromDB.getPassword());
+        }
         
         u.setRoleUser(dto.getRoleUser());
         u.setState(dto.getState());
-        System.out.println("****--IDPERSON = "+dto.getPerson().getIdperson()+" --****");
-        Optional<Person> optionalperson = personrepository.findById(dto.getPerson().getIdperson());
+        System.out.println("****--IDPERSON = "+dto.getIdperson()+" --****");
+        Optional<Person> optionalperson = personrepository.findById(dto.getIdperson());
         if(optionalperson.isPresent()){
             u.setPerson(optionalperson.get());
         }else{
             System.out.println("****-- NOT FOUND PERSON --****");
             // Crear nueva persona con los datos del DTO
             Person person = Person.builder()
-            .typeId(dto.getPerson().getTypeId())
-            .identification(dto.getPerson().getIdentification())
-            .name(dto.getPerson().getName())
-            .adress(dto.getPerson().getAdress())
-            .email(dto.getPerson().getEmail())
-            .phone(dto.getPerson().getPhone())
-            .birthdate(dto.getPerson().getBirthdate())
-            .genre(dto.getPerson().getGenre())
+            .typeId(dto.getTypeId())
+            .identification(dto.getIdentification())
+            .name(dto.getName())
+            .adress(dto.getAdress())
+            .email(dto.getEmail())
+            .phone(dto.getPhone())
+            .birthdate(dto.getBirthdate())
+            .genre(dto.getGenre())
             .build();
             
             u.setPerson(person);             
@@ -110,9 +127,17 @@ public class UserService implements IUserService {
         dto.setState(u.getState());
         
         if(u.getPerson()!=null){
-            dto.setPerson(personservice.findById(u.getPerson().getIdperson()));
+            dto.setIdperson(u.getPerson().getIdperson());
+            dto.setTypeId(u.getPerson().getTypeId());
+            dto.setIdentification(u.getPerson().getIdentification());
+            dto.setName(u.getPerson().getName());
+            dto.setAdress(u.getPerson().getAdress());
+            dto.setEmail(u.getPerson().getEmail());
+            dto.setPhone(u.getPerson().getPhone());
+            dto.setBirthdate(u.getPerson().getBirthdate());
+            dto.setGenre(u.getPerson().getGenre());
         }else{
-            dto.setPerson(null);
+            dto.setIdperson(null);
         }
 
         return dto;

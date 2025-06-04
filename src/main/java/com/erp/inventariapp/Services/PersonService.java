@@ -2,11 +2,14 @@ package com.erp.inventariapp.Services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.erp.inventariapp.DTOs.CategoryDTO;
 import com.erp.inventariapp.DTOs.PersonDTO;
+import com.erp.inventariapp.Entities.Category;
 import com.erp.inventariapp.Entities.Person;
 import com.erp.inventariapp.Exceptions.ResourceDeleteException;
 import com.erp.inventariapp.Exceptions.ResourceNotFoundException;
@@ -32,6 +35,19 @@ public class PersonService implements IPersonService {
         Person person = personRepository.findById(idperson).get();
         return convertToDTO(person);
     }
+
+    @Override
+    public List<PersonDTO> findByName(String name) {
+        Optional<List<Person>> optionalpersons = personRepository.findByNameContainingIgnoreCase(name);
+        if(optionalpersons.isPresent()){
+            List<Person> persons = optionalpersons.get();
+            List<PersonDTO> personsDTO = new ArrayList<>();
+            persons.forEach(c -> personsDTO.add(this.convertToDTO(c)));
+            return personsDTO;
+        }else{
+            throw new ResourceNotFoundException("namePersons");
+        }
+    }    
 
     @Override
     public PersonDTO create(PersonDTO dto) {

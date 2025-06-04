@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.erp.inventariapp.DTOs.SellerDTO;
 import com.erp.inventariapp.DTOs.UserDTO;
 import com.erp.inventariapp.Services.UserService;
 
@@ -31,12 +31,11 @@ public class UserController {
 
     @GetMapping
     @Operation(summary = "Obtener listado de todos las Usuarios")
-    public ResponseEntity<List<UserDTO>> listAll(){
-        List<UserDTO> dtos = userservice.findAll();
-        if(dtos.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(dtos, HttpStatus.OK);        
+    public ResponseEntity<List<UserDTO>> listAll(@RequestParam(required = false) String name) {
+        if (name != null && !name.isEmpty()) {
+            return ResponseEntity.ok(userservice.findByName(name));
+        }                
+        return new ResponseEntity<>(userservice.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

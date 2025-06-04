@@ -29,12 +29,11 @@ public class PersonController {
     PersonService personService;
     
     @GetMapping
-    public ResponseEntity<List<PersonDTO>> findAll() {
-        List<PersonDTO> dtos = personService.findAll();
-        if(dtos.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(dtos, HttpStatus.OK);
+    public ResponseEntity<List<PersonDTO>> findAll(@RequestParam(required = false) String name) {
+        if (name != null && !name.isEmpty()) {
+            return ResponseEntity.ok(personService.findByName(name));
+        }        
+        return ResponseEntity.ok(personService.findAll());        
     }
 
     @GetMapping("/{idperson}")

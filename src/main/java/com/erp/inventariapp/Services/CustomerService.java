@@ -96,7 +96,16 @@ public class CustomerService implements ICustomerService {
         CustomerDTO dto = new CustomerDTO();
         dto.setIdcustomer(s.getIdcustomer());
         dto.setState(s.getState());
-        dto.setPerson(personservice.findById(s.getPerson().getIdperson()));
+
+        dto.setIdperson(s.getPerson().getIdperson());
+        dto.setTypeId(s.getPerson().getTypeId());
+        dto.setIdentification(s.getPerson().getIdentification());
+        dto.setName(s.getPerson().getName());
+        dto.setAdress(s.getPerson().getAdress());
+        dto.setEmail(s.getPerson().getEmail());
+        dto.setPhone(s.getPerson().getPhone());
+        dto.setBirthdate(s.getPerson().getBirthdate());
+        dto.setGenre(s.getPerson().getGenre());
 
         return dto;
     }
@@ -105,22 +114,22 @@ public class CustomerService implements ICustomerService {
         c.setIdcustomer(dto.getIdcustomer());
         c.setState(dto.getState());
         
-        System.out.println("****--IDPERSON = "+dto.getPerson().getIdperson()+" --****");
-        Optional<Person> optionalperson = personrepository.findById(dto.getPerson().getIdperson());
+        System.out.println("****--IDPERSON = "+dto.getIdperson()+" --****");
+        Optional<Person> optionalperson = personrepository.findById(dto.getIdperson());
         if(optionalperson.isPresent()){
             c.setPerson(optionalperson.get());
         }else{
             System.out.println("****-- NOT FOUND PERSON --****");
             // Crear nueva persona con los datos del DTO
             Person person = Person.builder()
-            .typeId(dto.getPerson().getTypeId())
-            .identification(dto.getPerson().getIdentification())
-            .name(dto.getPerson().getName())
-            .adress(dto.getPerson().getAdress())
-            .email(dto.getPerson().getEmail())
-            .phone(dto.getPerson().getPhone())
-            .birthdate(dto.getPerson().getBirthdate())
-            .genre(dto.getPerson().getGenre())
+            .typeId(dto.getTypeId())
+            .identification(dto.getIdentification())
+            .name(dto.getName())
+            .adress(dto.getAdress())
+            .email(dto.getEmail())
+            .phone(dto.getPhone())
+            .birthdate(dto.getBirthdate())
+            .genre(dto.getGenre())
             .build();
             
             c.setPerson(person);             

@@ -35,8 +35,8 @@ public class SecurityConfiguration {
                                         "/swagger-ui/**", 
                                         "/swagger-ui.html",
                                         "/v3/api-docs.yaml").permitAll()
-                        .anyRequest().permitAll()
-                        //.anyRequest().authenticated()
+                        //.anyRequest().permitAll()
+                        .anyRequest().authenticated()
                     )
                 //.formLogin(Customizer.withDefaults());
                 .sessionManagement(sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -38,13 +38,13 @@ public class CustomerController {
         return new ResponseEntity<>(customerService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/{idcustomer}")
-    public ResponseEntity<CustomerDTO> findById(@PathVariable Long idcustomer) {
-        CustomerDTO dto = customerService.findById(idcustomer);
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomerDTO> findById(@PathVariable Long id) {
+        CustomerDTO dto = customerService.findById(id);
         if (dto.equals(null)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404 Not Found
         }
-        return new ResponseEntity<>(dto, HttpStatus.OK); // 200 OK        
+        return new ResponseEntity<>(dto, HttpStatus.OK); // 200 OK       
     }
 
     @PostMapping
@@ -53,21 +53,21 @@ public class CustomerController {
         return new ResponseEntity<>(ret, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{idcustomer}")
+    @PutMapping("/{id}")
     public ResponseEntity<CustomerDTO> update(@PathVariable Long id, @RequestBody CustomerDTO dto) {
         CustomerDTO ret = customerService.update(id, dto);
         return new ResponseEntity<>(ret, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{idcustomer}")
-    public ResponseEntity<String> delete(@RequestParam Long idcustomer){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@RequestParam Long id){
         try {
-            customerService.delete(idcustomer);
+            customerService.delete(id);
             return new ResponseEntity<>("Customer eliminado correctamente", HttpStatus.NO_CONTENT);
         } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>("No se encuentra el Customer con ID: "+idcustomer, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("No se encuentra el Customer con ID: "+id, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            return new ResponseEntity<>("Error al intentar eliminar el Customer con ID: "+idcustomer, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Error al intentar eliminar el Customer con ID: "+id, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -34,17 +34,16 @@ public class SellerController {
     SellerService sellerService;
     
     @GetMapping
-    public ResponseEntity<List<SellerDTO>> findAll() {
-        List<SellerDTO> dtos = sellerService.findAll();
-        if(dtos.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(dtos, HttpStatus.OK);
+    public ResponseEntity<List<SellerDTO>> findAll(@RequestParam(required = false) String name) {
+        if (name != null && !name.isEmpty()) {
+            return ResponseEntity.ok(sellerService.findByName(name));
+        }                
+        return new ResponseEntity<>(sellerService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/{idseller}")
-    public ResponseEntity<SellerDTO> findById(@PathVariable Long idseller) {
-        SellerDTO dto = sellerService.findById(idseller);
+    @GetMapping("/{id}")
+    public ResponseEntity<SellerDTO> findById(@PathVariable Long id) {
+        SellerDTO dto = sellerService.findById(id);
         if (dto.equals(null)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404 Not Found
         }
@@ -57,21 +56,21 @@ public class SellerController {
         return new ResponseEntity<>(ret, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{idseller}")
+    @PutMapping("/{id}")
     public ResponseEntity<SellerDTO> update(@PathVariable Long id, @RequestBody SellerDTO dto) {
         SellerDTO ret = sellerService.update(id, dto);
         return new ResponseEntity<>(ret, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{idseller}")
-    public ResponseEntity<String> delete(@RequestParam Long idseller){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@RequestParam Long id){
         try {
-            sellerService.delete(idseller);
+            sellerService.delete(id);
             return new ResponseEntity<>("Seller eliminado correctamente", HttpStatus.NO_CONTENT);
         } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>("No se encuentra el Seller con ID: "+idseller, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("No se encuentra el Seller con ID: "+id, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            return new ResponseEntity<>("Error al intentar eliminar el Seller con ID: "+idseller, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Error al intentar eliminar el Seller con ID: "+id, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -27,10 +27,13 @@ public class AuthService {
     public AuthResponse login(LoginRequest request){
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         UserDetails user = (UserDetails) userRepository.findByUsername(request.getUsername()).orElseThrow();
+        //UserApp user = (UserApp) userRepository.findByUsername(request.getUsername()).orElseThrow();
         String token = jwtService.getToken(user);
         return AuthResponse.builder()
-                .token(token)
-                .build();
+            .token(token)
+            .username(user.getUsername())
+            .build(); 
+        //return new AuthResponse(token, user.getUsername(), RoleUserEnum.ADMIN.toString());           
     }
 
     public AuthResponse register(RegisterRequest request){
