@@ -1,5 +1,7 @@
 package com.erp.inventariapp.Auth;
 
+import java.util.Optional;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,12 +29,25 @@ public class AuthService {
     public AuthResponse login(LoginRequest request){
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         UserDetails user = (UserDetails) userRepository.findByUsername(request.getUsername()).orElseThrow();
-        //UserApp user = (UserApp) userRepository.findByUsername(request.getUsername()).orElseThrow();
+        
+        /** Para obtener el rol */
+        UserApp u = new UserApp();
+        String roleUser = "ADMIN";
+        Optional<UserApp> opt_userApp = userRepository.findByUsername(request.getUsername());
+        if(opt_userApp.isPresent()){
+            u = opt_userApp.get();
+            roleUser = u.getRoleUser().toString();
+            System.out.println("****** ROL DE USER: "+roleUser+" ******");
+        }
+
         String token = jwtService.getToken(user);
         return AuthResponse.builder()
             .token(token)
             .username(user.getUsername())
+            .roleUser(roleUser)
             .build(); 
+
+        //UserApp user = (UserApp) userRepository.findByUsername(request.getUsername()).orElseThrow();
         //return new AuthResponse(token, user.getUsername(), RoleUserEnum.ADMIN.toString());           
     }
 
